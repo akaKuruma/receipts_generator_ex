@@ -8,7 +8,7 @@ defmodule ReceiptGenerator.CLITest do
   describe "main/1" do
     test "succesfully processes valid arguments" do
 
-      expect(ReceiptGenerator, :generate_receipt, fn input, output ->
+      expect(ReceiptGenerator, :generate_receipts, fn input, output ->
         assert input == "input/folder"
         assert output == "output/folder"
         :ok
@@ -22,7 +22,7 @@ defmodule ReceiptGenerator.CLITest do
     end
 
     test "handles invalid arguments" do
-      expect(ReceiptGenerator, :generate_receipt, fn _input, _output ->
+      expect(ReceiptGenerator, :generate_receipts, fn _input, _output ->
         raise ArgumentError, message: "Invalid input folder"
       end)
 

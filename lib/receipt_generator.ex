@@ -3,21 +3,21 @@ defmodule ReceiptGenerator do
   Documentation for `ReceiptGenerator`.
   """
 
+  alias ReceiptGenerator.FileProcessor
+
   @doc """
-  Generate a receipt from a folder of item lists.
+  Generate a receipt from a folder of item lists in parallel.
 
   ## Examples
 
-      iex> ReceiptGenerator.generate_receipt("input/folder", "output/folder")
+      iex> ReceiptGenerator.generate_receipts("input", "output")
       :ok
   """
-  def generate_receipt(input_folder, output_folder) when is_binary(input_folder) and is_binary(output_folder) do
-    IO.puts("Generating receipt from #{input_folder} to #{output_folder}")
-    # input_folder
-    # |> File.ls!()
-    # |> Enum.map(&File.read!(Path.join(input_folder, &1)))
-    # |> Enum.map(&parse_receipt(&1))
-    # |> Enum.map(&generate_receipt_html(&1))
-    # |> Enum.map(&File.write!(Path.join(output_folder, &1)))
+  @spec generate_receipts(binary(), binary()) :: :ok
+  def generate_receipts(input_folder, output_folder) when is_binary(input_folder) and is_binary(output_folder) do
+    input_folder
+    |> File.ls!()
+    |> Task.async_stream(&FileProcessor.process(&1, input_folder, output_folder), max_concurrency: System.schedulers_online())
+    |> Stream.run()
   end
 end

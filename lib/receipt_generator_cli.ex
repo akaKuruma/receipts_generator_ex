@@ -23,7 +23,7 @@ defmodule ReceiptGenerator.CLI do
 
   defp process(args) do
     try do
-      ReceiptGenerator.generate_receipt(args.input_folder, args.output_folder)
+      ReceiptGenerator.generate_receipts(args.input_folder, args.output_folder)
       IO.puts("Receipts generated successfully")
     rescue
       error ->
